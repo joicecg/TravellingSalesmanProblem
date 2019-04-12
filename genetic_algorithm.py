@@ -11,7 +11,7 @@ class Genetic_Algorithm:
 
     def initialization(self, size):
         for i in range(0, size):
-            self.routes.append(Route(random.sample(self.cities, len(self.cities))))
+            self.routes.append(Route(random.sample(self.cities, len(self.cities.vertices))))
 
     #TODO verifica isso aqui, funciona mas nao sei se realmente eh isso
     def selection(self):
