@@ -1,28 +1,32 @@
-import sys, math, random
-
-from city import City
+import sys
+from graph import Graph
 from genetic_algorithm import Genetic_Algorithm
 
 def load_cities_from_file(path):
     file = open(path, "r")
     lines = file.readlines()
-
     vertices = []
     for line in lines:
         l = line.split()
-        vertices.append((l[1], l[2]))
-
-    return City(vertices)
+        x = float(l[1])
+        y = float(l[2])
+        vertices.append((x, y))
+    
+    return Graph(vertices)
 
 class __main__:
-    # default file
-    sys.argv.append('input/berlin52.tsp.txt')
-    cities = load_cities_from_file(sys.argv[1])
-    genetic_algorithm = Genetic_Algorithm(cities)
-    genetic_algorithm.initialization(4)
-
-    #TODO repeat until population has converged
-    genetic_algorithm.selection()
-    genetic_algorithm.crossover()
-    #TODO mutation
-    #TODO compute fitness
+    # sys.argv.append('input/berlin52.tsp.txt')
+ #   sys.argv.append('input/pr76.tsp.txt')
+    sys.argv.append('input/st70.tsp.txt')
+    
+    population = 1000
+    iterations = 500
+    
+    city_graph = load_cities_from_file('input/st70.tsp.txt')
+    
+    ga = Genetic_Algorithm(city_graph, population)
+    ga.run(iterations)
+    
+    best_route = ga.best()
+    print(best_route.get_cost())
+    city_graph.plot(best_route)

@@ -1,28 +1,23 @@
+import random
+
 class Route:
-    def __init__(self, cities):
-        self.cities = cities
-        self.distance = self.calculate_distance()
-        self.fitness = self.calculate_fitness()
+    def __init__(self, city_graph, vertices = None):
+        self.city_graph = city_graph
+        self.__cost = None
+        
+        if vertices is None:
+            self.vertices = list(range(1, city_graph.n))
+            random.shuffle(self.vertices)
+        else:
+            self.vertices = vertices
 
-    def __eq__(self, other):
-        return self.fitness == other.fitness
 
-    def __lt__(self, other):
-        return self.fitness < other.fitness
+    def get_cost(self):
+        return self.__cost
 
-    def calculate_distance(self):
-        path_distance = 0
-
-        for i in range(0, len(self.cities)):
-            from_city = self.cities[i]
-            to_city = None
-            if i + 1 < len(self.cities):
-                to_city = self.cities[i + 1]
-            else:
-                to_city = self.cities[0]
-            path_distance += from_city.get_distance(to_city)
-
-        return path_distance
-
-    def calculate_fitness(self):
-        return 1 / float(self.distance)
+    def route_cost(self):
+        if self.__cost is None:
+            pts = [self.city_graph.vertices[i] for i in self.vertices]
+            pts.append(self.city_graph.vertices[0])
+            self.__cost = sum(map(self.city_graph.distance, pts, pts[1:])) + self.city_graph.distance(pts[0], pts[-1])
+        return self.__cost
